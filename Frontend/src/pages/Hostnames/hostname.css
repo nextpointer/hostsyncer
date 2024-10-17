@@ -12,16 +12,16 @@
     align-items: center;
     justify-content: start;
     /* background-color: red; */
-    &::-webkit-scrollbar{
-        display: none;
-    }
+    overflow-y: scroll;
+    scrollbar-width: none;
+    
     
 }
 
 
-.ip-add-btn{
+#ip-add-btn{
     position: absolute;
     right: 2.7rem;
-    top: 2.7rem;
+    top: 2rem;
 }
 
