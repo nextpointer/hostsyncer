@@ -18,16 +18,16 @@ export const Hostbar = (props: ComingIpData) => {
   let IpRef: HTMLInputElement | undefined;
   let HostnameRef: HTMLInputElement[] | undefined = [];
 
-  // if (props.isNew) {
-  //   onMount(() => {
-  //     if (IpRef) {
-  //       console.log("render");
+  if (props.isNew) {
+    onMount(() => {
+      if (IpRef) {
+        console.log("render");
         
-  //       IpRef.focus();
-  //       IpRef.select();
-  //     }
-  //   });
-  // }
+        IpRef.focus();
+        IpRef.select();
+      }
+    });
+  }
 
   // this is the function for set the Ip from Input
   const handleIpChange = (e: Event) => {
