@@ -13,16 +13,16 @@ import { Button } from "../Button/Button";
 export const Hostbar = (props: ComingIpData) => {
   const [ip, setIp] = createSignal<string>(""); //for to set the ipaddress
   const [Hostname, setHostname] = createSignal<string[]>(props.hostname);
+  const [HostnameInput,setHostnameInput] = createSignal<string>("")
   const [editable, setEditable] = createSignal<boolean>(true);
 
   let IpRef: HTMLInputElement | undefined;
-  let HostnameRef: HTMLInputElement[] | undefined = [];
 
   // if (props.isNew) {
   //   onMount(() => {
   //     if (IpRef) {
   //       console.log("render");
-        
+
   //       IpRef.focus();
   //       IpRef.select();
   //     }
@@ -80,40 +80,37 @@ export const Hostbar = (props: ComingIpData) => {
     setEditable(!editable);
   };
 
-  const sendHostbarData = (Event: KeyboardEvent, index: number) => {
-    if (Event.key === "Enter" && Hostname().length < 3) {
-      const currentIpStore = internalStore()[index]; // Access the current IP store based on the index
+  // const sendHostbarData = (Event: KeyboardEvent, index: number) => {
+  //   if (Event.key === "Enter" && Hostname().length < 3) {
+  //     const currentIpStore = internalStore()[index]; // Access the current IP store based on the index
 
-      if (!currentIpStore) return;
+  //     if (!currentIpStore) return;
 
-      const updatedHostname = [
-        ...Hostname(),
-        `${
-          (
-            IpRef?.parentElement?.nextElementSibling
-              ?.children[0] as HTMLInputElement
-          )?.value as Host
-        }`,
-      ] as Host[];
+  //     const updatedHostname = [
+  //       ...Hostname(),
+  //       `${
+  //         (
+  //           IpRef?.parentElement?.nextElementSibling
+  //             ?.children[0] as HTMLInputElement
+  //         )?.value as Host
+  //       }`,
+  //     ] as Host[];
 
-      // Update the specific entry instead of adding a new one
-      const updatedStore = internalStore().map((item, i) =>
-        i === index ? { ...item, hostname: updatedHostname } : item
-      );
+  //     // Update the specific entry instead of adding a new one
+  //     const updatedStore = internalStore().map((item, i) =>
+  //       i === index ? { ...item, hostname: updatedHostname } : item
+  //     );
 
-      // No need to cast, just set the array of IPStore objects
-      setInternalStore(updatedStore);
-    }
-  };
+  //     // No need to cast, just set the array of IPStore objects
+  //     setInternalStore(updatedStore);
+  //   }
+  // };
 
-  const handleInputChange = (e: Event, index: number) => {
-    const newHostname = [...Hostname()];
-    newHostname[index] = (e.target as HTMLInputElement).value;
-    setHostname(newHostname);
-  };
-
-  
-
+   const handleHostnameInput = (e:HTMLInputElement)=>{
+      if(e.key==='Enter'){
+        
+      }
+   }
 
   const addHostName = () => {
     if (Hostname().length < 3) {
@@ -131,14 +128,7 @@ export const Hostbar = (props: ComingIpData) => {
     );
     setInternalStore(updatedStore);
   };
-  const hostnameBlurHandle = (index: number) => {
-    if (Hostname()[index]) {
-    }
-  };
 
-  const handleAddHostnameClick = () => {
-    addHostName();
-  };
   return (
     <>
       <div class="Bar-Container" draggable="true">
@@ -162,23 +152,18 @@ export const Hostbar = (props: ComingIpData) => {
           />
         </div>
         <div class="hostnames">
-          {props.hostname.map((hostname, index) => (
-            <input
-              id="hostname-input"
-              type="text"
-              value={hostname}
-              onInput={(e) => handleInputChange(e, index)}
-              onBlur={() => hostnameBlurHandle(index)}
-              onkeypress={(e) => sendHostbarData(e, index)}
-              ref={(ref) => HostnameRef && (HostnameRef[index] = ref)}
-            />
-          ))}
+          <ul class="hostname-list">
+            {Hostname().map((hostname,_index) => (
+              <li>{hostname}</li>
+            ))}
+          </ul>
+          <input type="text" class="hostname-input" onInput={(e)=>handleHostnameInput}/>
         </div>
-        {Hostname().length < 3 && (
+        {/* {Hostname().length < 3 && (
           <button class="add-hostname" onClick={handleAddHostnameClick}>
             +
           </button>
-        )}
+        )} */}
       </div>
     </>
   );

@@ -50,35 +50,43 @@
     }
 }
 .hostnames{
-    width: auto;
-    height: 70%;
+    width:50% ;
+    /* height: 70%; */
     /* background-color: rgb(44, 151, 78); */
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
     gap:10px;
+    /* border: 1px solid #8d8d8d5d; */
+    border-radius: 5px;
+    /* padding: 1rem; */
+    font-size: 0.8rem;
 
     /* padding-left:10px ; */
     
 }
 
+.hostname-list{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+}
 
-#hostname-input{
-    max-width: 200px;
-    text-align: center;
-    height: inherit;
-    border: none;
-    background-color: rgba(0, 0, 0, 0.395);
+.hostname-list li{
+    padding: 10px;
     border: 1px solid #8d8d8d5d;
-    
-    /* background-color: red; */
-    border-radius: 5px;
+    border-radius: 10px;
+    background-color: #000000;
+    margin: 0 5px 0 5px;
+}
+
+
+.hostname-input{
+    border: none;
     outline: none;
-    /* font-size: 1rem; */
-    /* &:focus{
-        border: 1px solid #fff;
-    } */
+    padding:0.5rem;
+    background:transparent;
     
 }
 

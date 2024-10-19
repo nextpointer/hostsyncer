@@ -7,16 +7,16 @@ import { Button } from "../../Components/Button/Button";
 
 export const [internalStore, setInternalStore] = createSignal<IPStore[]>([]);
 setInternalStore([
-  // {
-  //   id: 1,
-  //   ip: "192.168.1.1" as IPAddress,
-  //   hostname: ["example.com", "localhost"] as Host[],
-  // },
-  // {
-  //   id: 2,
-  //   ip: "8.8.8.8" as IPAddress,
-  //   hostname: ["dns.google", "google-public-dns-a.google.com"] as Host[],
-  // },
+  {
+    id: 1,
+    ip: "192.168.1.1" as IPAddress,
+    hostname: ["example.com", "localhost"] as Host[],
+  },
+  {
+    id: 2,
+    ip: "8.8.8.8" as IPAddress,
+    hostname: ["dns.google", "google-public-dns-a.google.com"] as Host[],
+  },
 ]);
 
 // start the component 
