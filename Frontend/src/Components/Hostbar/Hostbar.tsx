@@ -11,13 +11,15 @@ export const Hostbar = (props: ComingIpData) => {
   const [editable, setEditable] = createSignal<boolean>(props.isNew || false);
   const [editingHostnameIndex, setEditingHostnameIndex] = createSignal<number | null>(null);
   const [showNotification, setShowNotification] = createSignal<string>(""); // For popup notifications
+  const [isNewEntry, setIsNewEntry] = createSignal<boolean>(props.isNew || false);
   let IpRef: HTMLInputElement | undefined;
 
   // Focus IP input if it's a new entry
   onMount(() => {
-    if (props.isNew && IpRef) {
+    if (isNewEntry() && IpRef) {
       IpRef.focus();
       IpRef.select();
+      setIsNewEntry(false);
     }
   });
 
@@ -47,6 +49,7 @@ export const Hostbar = (props: ComingIpData) => {
       setEditable(false); // Lock editing
       setShowNotification("IP Updated!"); // Show notification
 
+      setEditingHostnameIndex(0);
       // Focus the next input (hostname)
       IpRef?.parentElement?.nextElementSibling?.querySelector("input")?.focus();
     }
@@ -133,9 +136,10 @@ export const Hostbar = (props: ComingIpData) => {
       <div class="hostnames">
         <ul class="hostname-list">
           {hostnameList().map((hostname, index) => (
-            <li key={index} class="hostname-item">
+            <li class="hostname-item">
               {editingHostnameIndex() === index ? (
                 <input
+                class="temp-hostname-input"
                   type="text"
                   value={hostnameInput()}
                   onInput={handleHostnameChange}

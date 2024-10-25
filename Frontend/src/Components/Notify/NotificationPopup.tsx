@@ -17,7 +17,7 @@ export const NotificationPopup = (props: { message: string, onClose: () => void 
       {visible() && (
         <div class="notification-popup">
           <p>{props.message}</p>
-          <button onClick={props.onClose}>Close</button>
+          <button onClick={props.onClose}>✕</button>
         </div>
       )}
     </>
