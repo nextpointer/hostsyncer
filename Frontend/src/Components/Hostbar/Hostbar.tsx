@@ -1,30 +1,35 @@
 import { createSignal, onMount } from "solid-js";
 import "./hostbar.css";
 import { ComingIpData, Host, IPAddress, IPStore } from "../../lib/types";
-import { internalStore, setInternalStore } from "../../pages/Hostnames/Hostnames";
+import {
+  internalStore,
+  setInternalStore,
+} from "../../pages/Hostnames/Hostnames";
 import { NotificationPopup } from "../Notify/NotificationPopup";
 
 export const Hostbar = (props: ComingIpData) => {
   const [ip, setIp] = createSignal<string>(props.ip);
-  const [hostnameList, setHostnameList] = createSignal<string[]>(props.hostname);
+  const [hostnameList, setHostnameList] = createSignal<string[]>(
+    props.hostname
+  );
   const [hostnameInput, setHostnameInput] = createSignal<string>("");
   const [editable, setEditable] = createSignal<boolean>(props.isNew || false);
-  const [editingHostnameIndex, setEditingHostnameIndex] = createSignal<number | null>(null);
+  const [editingHostnameIndex, setEditingHostnameIndex] = createSignal<
+    number | null
+  >(null);
   const [showNotification, setShowNotification] = createSignal<string>(""); // For popup notifications
-  const [isNewEntry, setIsNewEntry] = createSignal<boolean>(props.isNew || false);
+  const [isNewEntry, setIsNewEntry] = createSignal<boolean>(
+    props.isNew || false
+  );
   let IpRef: HTMLInputElement | undefined;
-  let HostnameRef: HTMLInputElement[] | undefined = [];
 
-  // if (props.isNew) {
-  //   onMount(() => {
-  //     if (IpRef) {
-  //       console.log("render");
-        
-  //       IpRef.focus();
-  //       IpRef.select();
-  //     }
-  //   });
-  // }
+  onMount(() => {
+    if (IpRef && isNewEntry()) {
+      IpRef.focus();
+      IpRef.select();
+      setIsNewEntry(false);
+    }
+  });
 
   // this is the function for set the Ip from Input
   const handleIpChange = (e: Event) => {
@@ -33,7 +38,7 @@ export const Hostbar = (props: ComingIpData) => {
 
     const regexPattern =
       /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    
+
     if (!regexPattern.test(inputValue)) {
       IpRef?.setCustomValidity("Please enter a valid IP address");
     } else {
@@ -48,7 +53,7 @@ export const Hostbar = (props: ComingIpData) => {
       if (!IpRef?.checkValidity()) return; // Don't update if invalid IP
 
       // Update global store with the new IP
-      setInternalStore(props.index, 'ip', validIp as IPAddress);
+      setInternalStore(props.index, "ip", validIp as IPAddress);
       setEditable(false); // Lock editing
       setShowNotification("IP Updated!"); // Show notification
 
@@ -67,7 +72,7 @@ export const Hostbar = (props: ComingIpData) => {
       const newHostnames = [...hostnameList(), hostnameInput()];
 
       // Update global store and local state
-      setInternalStore(props.index, 'hostname', newHostnames as Host[]);
+      setInternalStore(props.index, "hostname", newHostnames as Host[]);
       setHostnameList(newHostnames);
       setHostnameInput(""); // Clear input after adding hostname
       setShowNotification("Hostname Added!"); // Show notification
@@ -84,7 +89,7 @@ export const Hostbar = (props: ComingIpData) => {
     if (hostnameList().length > 1) {
       const updatedHostnames = hostnameList().filter((_, i) => i !== index);
       setHostnameList(updatedHostnames);
-      setInternalStore(props.index, 'hostname', updatedHostnames as Host[]);
+      setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
       setShowNotification("Hostname Deleted!"); // Show notification
     } else {
       setShowNotification("Cannot delete the last hostname!"); // Ensure at least one hostname
@@ -105,7 +110,7 @@ export const Hostbar = (props: ComingIpData) => {
       );
 
       setHostnameList(updatedHostnames);
-      setInternalStore(props.index, 'hostname', updatedHostnames as Host[]);
+      setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
       setEditingHostnameIndex(null);
       setHostnameInput("");
       setShowNotification("Hostname Updated!"); // Show notification
@@ -121,8 +126,13 @@ export const Hostbar = (props: ComingIpData) => {
 
   return (
     <div class="Bar-Container">
-      {showNotification() && <NotificationPopup message={showNotification()} onClose={() => setShowNotification("")} />}
-      
+      {showNotification() && (
+        <NotificationPopup
+          message={showNotification()}
+          onClose={() => setShowNotification("")}
+        />
+      )}
+
       <div class="ip-name">
         <input
           type="text"
@@ -142,17 +152,22 @@ export const Hostbar = (props: ComingIpData) => {
             <li class="hostname-item">
               {editingHostnameIndex() === index ? (
                 <input
-                class="temp-hostname-input"
+                  class="temp-hostname-input"
                   type="text"
                   value={hostnameInput()}
                   onInput={handleHostnameChange}
                   onKeyDown={(e) => handleHostnameEdit(e, index)}
                 />
               ) : (
-                <span onClick={() => enableEditHostname(index)}>{hostname}</span>
+                <span onClick={() => enableEditHostname(index)}>
+                  {hostname}
+                </span>
               )}
               {hostnameList().length > 1 && ( // Show delete button only if more than 1 hostname
-                <button class="delete-hostname-btn" onClick={() => handleDeleteHostname(index)}>
+                <button
+                  class="delete-hostname-btn"
+                  onClick={() => handleDeleteHostname(index)}
+                >
                   ✕
                 </button>
               )}
@@ -171,10 +186,7 @@ export const Hostbar = (props: ComingIpData) => {
         )}
       </div>
 
-      <button
-        class="delete-hostbar-btn"
-        onClick={handleDeleteHostbar}
-      >
+      <button class="delete-hostbar-btn" onClick={handleDeleteHostbar}>
         Delete Host
       </button>
     </div>
