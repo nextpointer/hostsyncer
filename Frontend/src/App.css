@@ -19,11 +19,11 @@
 
 
 .nav-conatainer {
-    border-right: 1px solid #a1a1a19b;
+    /* border-right: 1px solid #a1a1a19b; */
     border-radius: 0 1vw 1vw 0;
     position: relative;
     height: 100vh;
-    width: 5rem;
+    width: 6rem;
     display: flex;
     justify-content: center;
     flex-direction: column;
