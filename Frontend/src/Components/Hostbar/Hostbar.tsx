@@ -18,7 +18,6 @@ export const Hostbar = (props: ComingIpData) => {
     if (props.isNew && IpRef) {
       IpRef.focus();
       IpRef.select();
-      props.isNew = false;
     }
   });
 
@@ -109,13 +108,9 @@ export const Hostbar = (props: ComingIpData) => {
 
   // Delete the entire Hostbar
   const handleDeleteHostbar = () => {
-    if (internalStore.length > 1) { // Ensure there's at least one hostbar
-      const updatedStore = internalStore.filter((_, i) => i !== props.index);
-      setInternalStore(updatedStore);
-      setShowNotification("Hostbar Deleted!"); // Show notification
-    } else {
-      setShowNotification("Cannot delete the last Hostbar!"); // Prevent deleting the last hostbar
-    }
+    const updatedStore = internalStore.filter((_, i) => i !== props.index);
+    setInternalStore(updatedStore);
+    setShowNotification("Hostname deleted!");
   };
 
   return (
@@ -151,7 +146,7 @@ export const Hostbar = (props: ComingIpData) => {
               )}
               {hostnameList().length > 1 && ( // Show delete button only if more than 1 hostname
                 <button class="delete-hostname-btn" onClick={() => handleDeleteHostname(index)}>
-                  Delete
+                  ✕
                 </button>
               )}
             </li>
@@ -172,9 +167,8 @@ export const Hostbar = (props: ComingIpData) => {
       <button
         class="delete-hostbar-btn"
         onClick={handleDeleteHostbar}
-        disabled={internalStore.length <= 1} // Disable button if it's the last hostbar
       >
-        Delete Hostbar
+        Delete Host
       </button>
     </div>
   );
