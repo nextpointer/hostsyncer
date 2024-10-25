@@ -98,3 +98,39 @@
     outline: none;
     border: none;
 }
+
+.hostname-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-hostname-btn {
+  display: none;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.hostname-item:hover .delete-hostname-btn {
+  display: inline-block;
+}
+
+.delete-hostbar-btn {
+  margin-top: 10px;
+  padding: 0.5rem;
+  border: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-hostbar-btn:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+  

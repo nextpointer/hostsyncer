@@ -1,0 +1,27 @@
+.notification-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #4caf50;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+  }
+  
+  .notification-popup p {
+    margin: 0;
+  }
+  
+  .notification-popup button {
+    margin-left: 10px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .notification-popup button:hover {
+    text-decoration: underline;
+  }

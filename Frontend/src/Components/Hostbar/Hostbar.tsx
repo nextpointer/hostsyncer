@@ -1,170 +1,181 @@
 import { createSignal, onMount } from "solid-js";
-import { DragLogo } from "../DragLogo/DragLogo";
 import "./hostbar.css";
-// import all the predifined types
 import { ComingIpData, Host, IPAddress, IPStore } from "../../lib/types";
-// now import the internalStore State from HostName
-import {
-  internalStore,
-  setInternalStore,
-} from "../../pages/Hostnames/Hostnames";
-import { Button } from "../Button/Button";
+import { internalStore, setInternalStore } from "../../pages/Hostnames/Hostnames";
+import { NotificationPopup } from "../Notify/NotificationPopup";
 
 export const Hostbar = (props: ComingIpData) => {
-  const [ip, setIp] = createSignal<string>(""); //for to set the ipaddress
-  const [Hostname, setHostname] = createSignal<string[]>(props.hostname);
-  const [HostnameInput,setHostnameInput] = createSignal<string>("")
-  const [editable, setEditable] = createSignal<boolean>(true);
-
+  const [ip, setIp] = createSignal<string>(props.ip);
+  const [hostnameList, setHostnameList] = createSignal<string[]>(props.hostname);
+  const [hostnameInput, setHostnameInput] = createSignal<string>("");
+  const [editable, setEditable] = createSignal<boolean>(props.isNew || false);
+  const [editingHostnameIndex, setEditingHostnameIndex] = createSignal<number | null>(null);
+  const [showNotification, setShowNotification] = createSignal<string>(""); // For popup notifications
   let IpRef: HTMLInputElement | undefined;
 
-  // if (props.isNew) {
-  //   onMount(() => {
-  //     if (IpRef) {
-  //       console.log("render");
-
-  //       IpRef.focus();
-  //       IpRef.select();
-  //     }
-  //   });
-  // }
-
-  // this is the function for set the Ip from Input
-  const handleIpChange = (e: Event) => {
-    setIp((e.target as HTMLInputElement).value);
-  };
-
-  const handleIpBlur = () => {
-    if (ip()) {
-      addHostName();
+  // Focus IP input if it's a new entry
+  onMount(() => {
+    if (props.isNew && IpRef) {
+      IpRef.focus();
+      IpRef.select();
+      props.isNew = false;
     }
-  };
+  });
 
-  const handleIpEnter = (e: KeyboardEvent) => {
-    IpRef?.setCustomValidity("");
-    const inputValue = IpRef?.value!;
+  // Handle IP input change and validation
+  const handleIpChange = (e: Event) => {
+    const inputValue = (e.target as HTMLInputElement).value;
+    setIp(inputValue);
+
     const regexPattern =
       /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    
+    if (!regexPattern.test(inputValue)) {
+      IpRef?.setCustomValidity("Please enter a valid IP address");
+    } else {
+      IpRef?.setCustomValidity(""); // Clear the error once valid
+    }
+  };
+
+  // Commit IP change on Enter and move to hostname input
+  const handleIpEnter = (e: KeyboardEvent) => {
     if (e.key === "Enter" && editable()) {
-      if (regexPattern.test(inputValue)) {
-        (
-          IpRef?.parentElement?.nextElementSibling
-            ?.children[0] as HTMLInputElement
-        ).focus();
-        (
-          IpRef?.parentElement?.nextElementSibling
-            ?.children[0] as HTMLInputElement
-        ).select();
-        setEditable(!editable);
-      } else {
-        IpRef?.setCustomValidity("Please enter a valid IP address");
-        console.log("No match pattern");
-      }
+      const validIp = ip();
+      if (!IpRef?.checkValidity()) return; // Don't update if invalid IP
+
+      // Update global store with the new IP
+      setInternalStore(props.index, 'ip', validIp as IPAddress);
+      setEditable(false); // Lock editing
+      setShowNotification("IP Updated!"); // Show notification
+
+      // Focus the next input (hostname)
+      IpRef?.parentElement?.nextElementSibling?.querySelector("input")?.focus();
     }
   };
 
-  const doubleClick = (e: MouseEvent) => {
-    console.log(editable());
-    if (e.detail === 2) {
-      console.log("double");
-      setEditable(!editable());
-    }
-  };
-  const NoOutline = () => {
-    if (IpRef) {
-      IpRef.style.border = "none";
-    }
-  };
+  // Toggle editable state on double-click
+  const toggleEditable = () => setEditable(!editable());
 
-  const InputFocusOut = () => {
-    setEditable(!editable);
-  };
+  // Handle hostname input and update store
+  const handleHostnameInput = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && hostnameInput() && hostnameList().length < 3) {
+      const newHostnames = [...hostnameList(), hostnameInput()];
 
-  // const sendHostbarData = (Event: KeyboardEvent, index: number) => {
-  //   if (Event.key === "Enter" && Hostname().length < 3) {
-  //     const currentIpStore = internalStore()[index]; // Access the current IP store based on the index
-
-  //     if (!currentIpStore) return;
-
-  //     const updatedHostname = [
-  //       ...Hostname(),
-  //       `${
-  //         (
-  //           IpRef?.parentElement?.nextElementSibling
-  //             ?.children[0] as HTMLInputElement
-  //         )?.value as Host
-  //       }`,
-  //     ] as Host[];
-
-  //     // Update the specific entry instead of adding a new one
-  //     const updatedStore = internalStore().map((item, i) =>
-  //       i === index ? { ...item, hostname: updatedHostname } : item
-  //     );
-
-  //     // No need to cast, just set the array of IPStore objects
-  //     setInternalStore(updatedStore);
-  //   }
-  // };
-
-   const handleHostnameInput = (e:HTMLInputElement)=>{
-      if(e.key==='Enter'){
-        
-      }
-   }
-
-  const addHostName = () => {
-    if (Hostname().length < 3) {
-      const updatedHostname = [...Hostname(), ""];
-      setHostname(updatedHostname);
-      updateParentHostnames(updatedHostname);
+      // Update global store and local state
+      setInternalStore(props.index, 'hostname', newHostnames as Host[]);
+      setHostnameList(newHostnames);
+      setHostnameInput(""); // Clear input after adding hostname
+      setShowNotification("Hostname Added!"); // Show notification
     }
   };
 
-  const updateParentHostnames = (updatedHostname: string[]) => {
-    const updatedStore = internalStore().map((item, i) =>
-      i === props.index
-        ? { ...item, hostname: updatedHostname as Host[] }
-        : item
-    );
-    setInternalStore(updatedStore);
+  // Handle real-time hostname input change
+  const handleHostnameChange = (e: Event) => {
+    setHostnameInput((e.target as HTMLInputElement).value);
+  };
+
+  // Delete a specific hostname, but ensure at least one remains
+  const handleDeleteHostname = (index: number) => {
+    if (hostnameList().length > 1) {
+      const updatedHostnames = hostnameList().filter((_, i) => i !== index);
+      setHostnameList(updatedHostnames);
+      setInternalStore(props.index, 'hostname', updatedHostnames as Host[]);
+      setShowNotification("Hostname Deleted!"); // Show notification
+    } else {
+      setShowNotification("Cannot delete the last hostname!"); // Ensure at least one hostname
+    }
+  };
+
+  // Enable editing for a specific hostname
+  const enableEditHostname = (index: number) => {
+    setEditingHostnameIndex(index);
+    setHostnameInput(hostnameList()[index]);
+  };
+
+  // Commit hostname edit on Enter
+  const handleHostnameEdit = (e: KeyboardEvent, index: number) => {
+    if (e.key === "Enter" && hostnameInput()) {
+      const updatedHostnames = hostnameList().map((host, i) =>
+        i === index ? hostnameInput() : host
+      );
+
+      setHostnameList(updatedHostnames);
+      setInternalStore(props.index, 'hostname', updatedHostnames as Host[]);
+      setEditingHostnameIndex(null);
+      setHostnameInput("");
+      setShowNotification("Hostname Updated!"); // Show notification
+    }
+  };
+
+  // Delete the entire Hostbar
+  const handleDeleteHostbar = () => {
+    if (internalStore.length > 1) { // Ensure there's at least one hostbar
+      const updatedStore = internalStore.filter((_, i) => i !== props.index);
+      setInternalStore(updatedStore);
+      setShowNotification("Hostbar Deleted!"); // Show notification
+    } else {
+      setShowNotification("Cannot delete the last Hostbar!"); // Prevent deleting the last hostbar
+    }
   };
 
   return (
-    <>
-      <div class="Bar-Container" draggable="true">
-        {/* <div class="drag-logo">
-          <DragLogo />
-        </div> */}
-        <div class="ip-name">
+    <div class="Bar-Container">
+      {showNotification() && <NotificationPopup message={showNotification()} onClose={() => setShowNotification("")} />}
+      
+      <div class="ip-name">
+        <input
+          type="text"
+          value={ip()}
+          ref={(el) => (IpRef = el)}
+          onInput={handleIpChange}
+          onKeyDown={handleIpEnter} // Use onKeyDown for consistent Enter handling
+          ondblclick={toggleEditable}
+          readOnly={!editable()}
+          onfocus={() => (IpRef!.style.border = "none")} // Remove focus outline
+        />
+      </div>
+
+      <div class="hostnames">
+        <ul class="hostname-list">
+          {hostnameList().map((hostname, index) => (
+            <li key={index} class="hostname-item">
+              {editingHostnameIndex() === index ? (
+                <input
+                  type="text"
+                  value={hostnameInput()}
+                  onInput={handleHostnameChange}
+                  onKeyDown={(e) => handleHostnameEdit(e, index)}
+                />
+              ) : (
+                <span onClick={() => enableEditHostname(index)}>{hostname}</span>
+              )}
+              {hostnameList().length > 1 && ( // Show delete button only if more than 1 hostname
+                <button class="delete-hostname-btn" onClick={() => handleDeleteHostname(index)}>
+                  Delete
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        {hostnameList().length < 3 && (
           <input
             type="text"
-            name="ip"
-            onInput={handleIpChange}
-            onkeypress={(e: KeyboardEvent) => {
-              handleIpEnter(e);
-            }}
-            value={props.ip}
-            ref={IpRef}
-            onclick={(e: MouseEvent) => doubleClick(e)}
-            // onblur={InputFocusOut}
-            readOnly={!editable()}
-            onfocus={NoOutline}
+            class="hostname-input"
+            value={hostnameInput()}
+            onInput={handleHostnameChange}
+            onKeyDown={handleHostnameInput} // Use onKeyDown for hostname Enter handling
           />
-        </div>
-        <div class="hostnames">
-          <ul class="hostname-list">
-            {Hostname().map((hostname,_index) => (
-              <li>{hostname}</li>
-            ))}
-          </ul>
-          <input type="text" class="hostname-input" onInput={(e)=>handleHostnameInput}/>
-        </div>
-        {/* {Hostname().length < 3 && (
-          <button class="add-hostname" onClick={handleAddHostnameClick}>
-            +
-          </button>
-        )} */}
+        )}
       </div>
-    </>
+
+      <button
+        class="delete-hostbar-btn"
+        onClick={handleDeleteHostbar}
+        disabled={internalStore.length <= 1} // Disable button if it's the last hostbar
+      >
+        Delete Hostbar
+      </button>
+    </div>
   );
 };
