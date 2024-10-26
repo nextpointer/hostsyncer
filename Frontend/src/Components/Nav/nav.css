@@ -3,7 +3,7 @@
   width: 4rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   background-color: var(--bar-background);
   gap: 2rem;
@@ -11,18 +11,13 @@
   border-radius: 50px;
   margin: 1.2rem;
   /* margin:0 25px 0 15px; */
-
   position: relative;
+
+  /* souze - change */
+  padding: 4rem 0;
+  justify-content: space-around;
 }
 
-.nav-bar::before{
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  
-
-}
 .nav-elements-a {
   display: block;
   width: 100%;
@@ -32,6 +27,7 @@
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  /* position: relative; */
   /* color: #ffffff70; */
 }
 
@@ -60,30 +56,43 @@
 .active2 {
   color: #fff;
   background-color: #000;
-  transition: background-color 0.2s ;
-  position: relative;
+  transition: background-color 0.2s;
+  svg {
+    color: #000;
+  }
+
+  /* position: relative; */
 }
 
-.active2::after{
+/* Was */
+/* .active2::after {
   content: "";
   background-color: red;
   height: 3rem;
   width: 3rem;
   position: absolute;
   border-radius: 50%;
-  top:var(--top);
-  transition:top .4s ease-in;
+  top: var(--top);
+  transition: top 0.4s ease-in;
+} */
+
+/* Current  */
+.nav-elements-a:nth-child(1)::after {
+  content: "";
+  background-color: rgb(255, 255, 255);
+  height: 3rem;
+  width: 3rem;
+  position: absolute;
+  border-radius: 50%;
+  top: var(--top);
+  transition: top 0.2s ease-in;
 }
-
-
 
 .nav-element-logo svg {
   aspect-ratio: 1;
   width: 24px;
   z-index: 100;
-  
 }
-
 
 /* .nav-element-logo:hover {
   color: #ffffff;
