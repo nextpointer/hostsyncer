@@ -1,12 +1,13 @@
 @font-face {
   font-family: "GeistMono";
-  src: url(./assets/Fonts/GeistMono.ttf);
+  src: url(./assets/Fonts/Geist.woff2);
 }
 :root {
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: #ffffff;
   background-color: #000000;
+  --bar-background: #18181b;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,7 +17,9 @@
 
 *{
   font-family: GeistMono;
-  font-weight: 200;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 
@@ -27,15 +30,19 @@ body {
   place-items: center;
   min-width: 100%;
   min-height: 100vh;
+  line-height: 1.5;
 
 }
 
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
   letter-spacing: .2rem;
-  font-weight: 100;
+  font-weight: 500;
 
+}
+
+a,a:visited,a:hover,a:focus,a:active{
+  color: #fff;
 }
 
 

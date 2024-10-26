@@ -1,13 +1,16 @@
 .button-component{
-    margin: 0;
-    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #8d8d8d5d;
-    background-color: #21212155;
+    background-color: #ffffff;
+    color: #000;
+    border: none;
+    font-size: 1.1rem;
     border-radius: 5px;
+    outline: none;
     &:hover{
-        background-color: #2121219c;
+        background-color: #000000;
+        color: #fff;
+        outline: #b7b7b7 2px solid;
     }
 }

@@ -1,68 +1,90 @@
 .nav-bar {
-  height: 50%;
-  width: 70%;
+  height: 40%;
+  width: 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: greenyellow; */
+  background-color: var(--bar-background);
   gap: 2rem;
-  border: 1px solid rgba(96, 96, 96, 0.452);
+  /* border: 1px solid rgba(96, 96, 96, 0.452); */
   border-radius: 50px;
   margin: 1.2rem;
   /* margin:0 25px 0 15px; */
+
+  position: relative;
 }
 
+.nav-bar::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  
+
+}
 .nav-elements-a {
   display: block;
   width: 100%;
   text-decoration: none;
-  /* background-color: red;  */
+  /* background-color: rgb(200, 81, 81);  */
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  color: #ffffff70;
-  transition: color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-.active {
-  color: #ffffff;
-  animation: active-tab 0.3s ease-in-out;
+  /* color: #ffffff70; */
 }
 
 .nav-elements {
-  position: relative;
+  /* position: relative; */
   height: 3rem;
   width: 3rem;
-  /* background-color: white; */
+  /* background-color: rgb(32, 177, 102); */
   border-radius: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #bbbbbb;
 }
 
 .nav-element-logo {
   height: 3rem;
   width: 3rem;
   border-radius: 50%;
-  background-color: #46464683;
-  position: absolute;
-  left: 0;
+  /* background-color: #1990a5; */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-@keyframes active-tab {
-    0% {
-      color: #fff;
-      color: #666;
-    }
-    100% {
-      color: #ccc;
-      color: #333;
-    }
-  }
+.active2 {
+  color: #fff;
+  background-color: #000;
+  transition: background-color 0.2s ;
+  position: relative;
+}
+
+.active2::after{
+  content: "";
+  background-color: red;
+  height: 3rem;
+  width: 3rem;
+  position: absolute;
+  border-radius: 50%;
+  top:var(--top);
+  transition:top .4s ease-in;
+}
+
+
+
+.nav-element-logo svg {
+  aspect-ratio: 1;
+  width: 24px;
+  z-index: 100;
+  
+}
+
+
 /* .nav-element-logo:hover {
   color: #ffffff;
 } */

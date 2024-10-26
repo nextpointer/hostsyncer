@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import "./hostbar.css";
-import { ComingIpData, Host, IPAddress, IPStore } from "../../lib/types";
+import { ComingIpData, Host, IPAddress } from "../../lib/types";
 import {
   internalStore,
   setInternalStore,
