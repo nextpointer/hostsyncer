@@ -2,9 +2,8 @@ import { createSignal, onMount } from "solid-js";
 import "./hostbar.css";
 import { ComingIpData, Host, IPAddress } from "../../lib/types";
 import { internalStore, setInternalStore } from "../../Store/store";
-import { NotificationPopup } from "../Notify/NotificationPopup";
-import { NotifyError,setNotifyError } from "../../Store/store";
-import { showNotification,setShowNotification } from "../../Store/store";
+import { setNotifyError } from "../../Store/store";
+import { setShowNotification } from "../../Store/store";
 
 export const Hostbar = (props: ComingIpData) => {
   const [ip, setIp] = createSignal<string>(props.ip);
