@@ -43,23 +43,18 @@
   }
 }
 .hostnames {
-  width: auto;
-  max-width: 60%;
+  width: 60%;
   height: 95%;
-  /* background-color: rgb(44, 151, 78); */
+  /* background-color: #2c974e; */
   display: flex;
   flex-direction: row;
   justify-content: start;
   align-items: center;
   gap: 10px;
-  border-radius: 5px;
+  /* border-radius: 5px; */
   font-size: 0.8rem;
   overflow: scroll;
   scrollbar-width: none;
-}
-
-.hostnames:hover {
-  border: 1px solid #8d8d8d33;
 }
 .hostname-list {
   list-style-type: none;
@@ -73,7 +68,7 @@
 .hostname-list li {
   padding: 10px;
   /* border: 1px solid #8d8d8d5d; */
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #000000;
   margin: 0 5px 0 5px;
   

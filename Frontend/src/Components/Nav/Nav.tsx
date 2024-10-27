@@ -40,10 +40,11 @@ const navItems = [
     ),
   },
 ];
-const topsValue = [19, 43, 66.2];
+const topsValue = [16, 42, 68];
+// const topsValue = [19, 43, 66.2];
 export const Nav = () => {
   const location = useLocation();
-  const [top, setTop] = createSignal<number>(20);
+  const [top, setTop] = createSignal<number>(topsValue[0]);
   return (
     <>
       <div class="nav-bar">

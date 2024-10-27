@@ -1,11 +1,10 @@
 import { createSignal, onMount } from "solid-js";
 import "./hostbar.css";
 import { ComingIpData, Host, IPAddress } from "../../lib/types";
-import {
-  internalStore,
-  setInternalStore,
-} from "../../pages/Hostnames/Hostnames";
+import { internalStore, setInternalStore } from "../../Store/store";
 import { NotificationPopup } from "../Notify/NotificationPopup";
+import { NotifyError,setNotifyError } from "../../Store/store";
+import { showNotification,setShowNotification } from "../../Store/store";
 
 export const Hostbar = (props: ComingIpData) => {
   const [ip, setIp] = createSignal<string>(props.ip);
@@ -17,7 +16,6 @@ export const Hostbar = (props: ComingIpData) => {
   const [editingHostnameIndex, setEditingHostnameIndex] = createSignal<
     number | null
   >(null);
-  const [showNotification, setShowNotification] = createSignal<string>(""); // For popup notifications
   const [isNewEntry, setIsNewEntry] = createSignal<boolean>(
     props.isNew || false
   );
@@ -66,9 +64,25 @@ export const Hostbar = (props: ComingIpData) => {
   // Toggle editable state on double-click
   const toggleEditable = () => setEditable(!editable());
 
+  const lengthCheck = (hostnamelist: string[]) => {
+    let totalstring: string = hostnamelist.join("") + hostnameInput();
+    if (totalstring.length < 30) {
+      return true;
+    }
+    setNotifyError(true);
+    setShowNotification("Hostname chacter length should be less than 90");
+    setNotifyError(false);
+    return false;
+  };
+
   // Handle hostname input and update store
   const handleHostnameInput = (e: KeyboardEvent) => {
-    if (e.key === "Enter" && hostnameInput() && hostnameList().length < 3) {
+    if (
+      e.key === "Enter" &&
+      hostnameInput() &&
+      hostnameList().length < 3 &&
+      lengthCheck(hostnameList())
+    ) {
       const newHostnames = [...hostnameList(), hostnameInput()];
 
       // Update global store and local state
@@ -130,9 +144,9 @@ export const Hostbar = (props: ComingIpData) => {
         <NotificationPopup
           message={showNotification()}
           onClose={() => setShowNotification("")}
+          error={NotifyError()}
         />
       )}
-
       <div class="ip-name">
         <input
           type="text"
