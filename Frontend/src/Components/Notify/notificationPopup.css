@@ -1,10 +1,11 @@
 .notification-popup {
     position: fixed;
-    top: 2vw;
+    min-width: 10rem;
+    top: 3vw;
     right: 2vw;
     /* background-color: #5f5f5f20; */
     color: white;
-    padding: 1rem;
+    padding: 1.2rem;
     border-radius: 8px;
     /* box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1); */
     z-index: 100;
@@ -23,9 +24,15 @@
     margin-left: 10px;
     border: none;
     color: white;
+    padding: 5px 8px;
     cursor: pointer;
-    padding: 1rem;
     background: transparent;
+    position: absolute;
+    top:-8px;
+    right: -8px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    color: #000;
 
   }
   

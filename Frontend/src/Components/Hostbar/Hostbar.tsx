@@ -70,7 +70,7 @@ export const Hostbar = (props: ComingIpData) => {
       return true;
     }
     setNotifyError(true);
-    setShowNotification("Hostname chacter length should be less than 90");
+    setShowNotification("Hostname character length should be less than 90");
     setNotifyError(false);
     return false;
   };
@@ -140,13 +140,7 @@ export const Hostbar = (props: ComingIpData) => {
 
   return (
     <div class="Bar-Container">
-      {showNotification() && (
-        <NotificationPopup
-          message={showNotification()}
-          onClose={() => setShowNotification("")}
-          error={NotifyError()}
-        />
-      )}
+      
       <div class="ip-name">
         <input
           type="text"
@@ -195,7 +189,7 @@ export const Hostbar = (props: ComingIpData) => {
             class="hostname-input"
             value={hostnameInput()}
             onInput={handleHostnameChange}
-            onKeyDown={handleHostnameInput} // Use onKeyDown for hostname Enter handling
+            onKeyDown={handleHostnameInput} 
           />
         )}
       </div>
