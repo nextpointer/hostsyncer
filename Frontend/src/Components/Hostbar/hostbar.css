@@ -8,6 +8,7 @@
   justify-content: start;
   align-items: center;
   position: relative;
+  scroll-snap-align: end;
   &:hover {
     border-color: #8d8d8d6d;
   }
@@ -63,6 +64,7 @@
   padding: 0;
   margin: 0;
   white-space: no-wrap;
+  /* background-color: red; */
 }
 
 .hostname-list li {
@@ -87,11 +89,14 @@
   outline: none;
   padding: 0.5rem;
   background: transparent;
+  /* background-color: rgb(17, 0, 255); */
 }
 .temp-hostname-input {
   border: none;
   outline: none;
   /* background: transparent; */
+  /* background-color: greenyellow; */
+  height: 30px;
 }
 
 .add-hostname {

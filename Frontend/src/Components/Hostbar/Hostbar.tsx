@@ -14,6 +14,8 @@ export const Hostbar = (props: ComingIpData) => {
   );
   // state for hostname input
   const [hostnameInput, setHostnameInput] = createSignal<string>("");
+  // create a state for when the hostnames are editing
+  const [editingInput, setEditingInput] = createSignal<string>("");
   // state for editing or not
   const [editable, setEditable] = createSignal<boolean>(props.isNew || false);
   // state for which hostname we have to update
@@ -34,8 +36,6 @@ export const Hostbar = (props: ComingIpData) => {
       setIsNewEntry(false);
     }
   });
-
-  
 
   // this is the function for set the Ip from Input
   const handleIpChange = (e: Event) => {
@@ -106,12 +106,20 @@ export const Hostbar = (props: ComingIpData) => {
     setHostnameInput((e.target as HTMLInputElement).value);
   };
 
+  // Handle editing text change
+  const handleEditingTextChange = (e: Event) => {
+    setEditingInput((e.target as HTMLInputElement).value);
+  };
+
   // Delete a specific hostname, but ensure at least one remains
   const handleDeleteHostname = (index: number) => {
     if (hostnameList().length > 1) {
+      setEditingHostnameIndex(null)
+      setEditingInput("")
       const updatedHostnames = hostnameList().filter((_, i) => i !== index);
       setHostnameList(updatedHostnames);
       setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
+      
       setShowNotification("Hostname Deleted!"); // Show notification
     } else {
       setShowNotification("Cannot delete the last hostname!"); // Ensure at least one hostname
@@ -121,22 +129,51 @@ export const Hostbar = (props: ComingIpData) => {
   // Enable editing for a specific hostname
   const enableEditHostname = (index: number) => {
     setEditingHostnameIndex(index);
-    setHostnameInput(hostnameList()[index]);
+    setEditingInput(hostnameList()[index]);
+    // go to next input
+    IpRef?.parentElement?.nextElementSibling?.querySelector("input")?.focus();
   };
 
   // Commit hostname edit on Enter
   const handleHostnameEdit = (e: KeyboardEvent, index: number) => {
-    if (e.key === "Enter" && hostnameInput()) {
+    if (e.key === "Enter" && editingInput()) {
       const updatedHostnames = hostnameList().map((host, i) =>
-        i === index ? hostnameInput() : host
+        i === index ? editingInput() : host
       );
 
       setHostnameList(updatedHostnames);
       setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
       setEditingHostnameIndex(null);
-      setHostnameInput("");
+      setEditingInput("");
       setShowNotification("Hostname Updated!"); // Show notification
     }
+  };
+  // works when editing focus out
+  const handleHostnameFocusOut = (
+    e: FocusEvent & { currentTarget: HTMLLIElement; target: Element }
+  ): void => {
+
+    // Check if the focus is moving to the delete button or the input field
+  const relatedTarget = e.relatedTarget as HTMLElement;
+
+  // If the related target is the delete button or the input field, do not commit changes
+  if (
+    relatedTarget &&
+    (relatedTarget.classList.contains("delete-hostname-btn") ||
+      relatedTarget.classList.contains("temp-hostname-input"))
+  ) {
+    return; // Exit the function without committing changes
+  }
+      const updatedHostnames = hostnameList().map((host, i) =>
+        i === editingHostnameIndex() ? editingInput() : host
+      );
+
+      setHostnameList(updatedHostnames);
+      setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
+      setEditingHostnameIndex(null);
+      setEditingInput("");
+      setShowNotification("Hostname Updated!"); // Show notification
+    
   };
 
   // Delete the entire Hostbar
@@ -164,17 +201,20 @@ export const Hostbar = (props: ComingIpData) => {
       <div class="hostnames">
         <ul class="hostname-list">
           {hostnameList().map((hostname, index) => (
-            <li class="hostname-item">
+            <li
+              class="hostname-item"
+              onFocusOut={(e) => handleHostnameFocusOut(e)}
+            >
               {editingHostnameIndex() === index ? (
                 <input
                   class="temp-hostname-input"
                   type="text"
-                  value={hostnameInput()}
-                  onInput={handleHostnameChange}
+                  value={editingInput()}
+                  onInput={handleEditingTextChange}
                   onKeyDown={(e) => handleHostnameEdit(e, index)}
                 />
               ) : (
-                <span onClick={() => enableEditHostname(index)}>
+                <span ondblclick={() => enableEditHostname(index)}>
                   {hostname}
                 </span>
               )}

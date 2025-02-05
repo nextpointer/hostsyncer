@@ -14,6 +14,7 @@
   overflow-y: scroll;
   scrollbar-width: none;
   position: relative;
+  scroll-snap-type: y mandatory;
 }
 .hostname-container::before{
   content: "";
