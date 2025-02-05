@@ -6,20 +6,27 @@ import { setNotifyError } from "../../Store/store";
 import { setShowNotification } from "../../Store/store";
 
 export const Hostbar = (props: ComingIpData) => {
+  // create a state for ip that is init by prop.ip
   const [ip, setIp] = createSignal<string>(props.ip);
+  // create a state for hostname that is init by prop.hostname
   const [hostnameList, setHostnameList] = createSignal<string[]>(
     props.hostname
   );
+  // state for hostname input
   const [hostnameInput, setHostnameInput] = createSignal<string>("");
+  // state for editing or not
   const [editable, setEditable] = createSignal<boolean>(props.isNew || false);
+  // state for which hostname we have to update
   const [editingHostnameIndex, setEditingHostnameIndex] = createSignal<
     number | null
   >(null);
+  // state for is it a new host?
   const [isNewEntry, setIsNewEntry] = createSignal<boolean>(
     props.isNew || false
   );
+  // reference of the ip section
   let IpRef: HTMLInputElement | undefined;
-
+  // when the screen first time mount this things will execute
   onMount(() => {
     if (IpRef && isNewEntry()) {
       IpRef.focus();
@@ -28,14 +35,16 @@ export const Hostbar = (props: ComingIpData) => {
     }
   });
 
+  
+
   // this is the function for set the Ip from Input
   const handleIpChange = (e: Event) => {
     const inputValue = (e.target as HTMLInputElement).value;
     setIp(inputValue);
-
+    // the input follow this regex
     const regexPattern =
       /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-
+    // error handling for ip
     if (!regexPattern.test(inputValue)) {
       IpRef?.setCustomValidity("Please enter a valid IP address");
     } else {
@@ -139,7 +148,6 @@ export const Hostbar = (props: ComingIpData) => {
 
   return (
     <div class="Bar-Container">
-      
       <div class="ip-name">
         <input
           type="text"
@@ -188,7 +196,7 @@ export const Hostbar = (props: ComingIpData) => {
             class="hostname-input"
             value={hostnameInput()}
             onInput={handleHostnameChange}
-            onKeyDown={handleHostnameInput} 
+            onKeyDown={handleHostnameInput}
           />
         )}
       </div>
