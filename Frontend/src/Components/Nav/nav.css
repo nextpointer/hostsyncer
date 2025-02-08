@@ -11,11 +11,12 @@
   border-radius: 50px;
   margin: 1.2rem;
   /* margin:0 25px 0 15px; */
-  position: relative;
+  /* position: relative; */
 
   /* souze - change */
   padding: 4rem 0;
   justify-content: space-around;
+
 }
 
 .nav-elements-a {
@@ -41,6 +42,7 @@
   justify-content: center;
   align-items: center;
   color: #bbbbbb;
+  position: relative;
 }
 
 .nav-element-logo {
@@ -80,13 +82,19 @@
 .nav-elements-a:nth-child(1)::after {
   content: "";
   background-color: rgb(255, 255, 255);
+  position: absolute;
   height: 3rem;
   width: 3rem;
   position: absolute;
   border-radius: 50%;
   top: var(--top);
+  left: var(--left);
   transition: top 0.2s ease-in;
+  z-index: 99;
+
 }
+
+
 
 .nav-element-logo svg {
   aspect-ratio: 1;
