@@ -69,7 +69,6 @@ export const Hostbar = (props: ComingIpData) => {
       // Focus the next input (hostname)
       if (!isDoubleClicked()) {
         setEditingHostnameIndex(0);
-        console.log("chuti", isDoubleClicked());
         IpRef?.parentElement?.nextElementSibling
           ?.querySelector("input")
           ?.focus();
