@@ -26,6 +26,9 @@ export const Hostbar = (props: ComingIpData) => {
   const [isNewEntry, setIsNewEntry] = createSignal<boolean>(
     props.isNew || false
   );
+  // create a state for not going re-edit the hostname after double click to the ip input
+  const [isDoubleClicked, setDoubleClicked] = createSignal<boolean>(false);
+
   // reference of the ip section
   let IpRef: HTMLInputElement | undefined;
   // when the screen first time mount this things will execute
@@ -63,14 +66,24 @@ export const Hostbar = (props: ComingIpData) => {
       setEditable(false); // Lock editing
       setShowNotification("IP Updated!"); // Show notification
 
-      setEditingHostnameIndex(0);
       // Focus the next input (hostname)
-      IpRef?.parentElement?.nextElementSibling?.querySelector("input")?.focus();
+      if (!isDoubleClicked()) {
+        setEditingHostnameIndex(0);
+        console.log("chuti", isDoubleClicked());
+        IpRef?.parentElement?.nextElementSibling
+          ?.querySelector("input")
+          ?.focus();
+      }
+      // update the double click update
+      setDoubleClicked(false);
     }
   };
 
   // Toggle editable state on double-click
-  const toggleEditable = () => setEditable(!editable());
+  const toggleEditable = () => {
+    setEditable(!editable());
+    setDoubleClicked(true);
+  };
 
   const lengthCheck = (hostnamelist: string[]) => {
     let totalstring: string = hostnamelist.join("") + hostnameInput();
@@ -114,12 +127,12 @@ export const Hostbar = (props: ComingIpData) => {
   // Delete a specific hostname, but ensure at least one remains
   const handleDeleteHostname = (index: number) => {
     if (hostnameList().length > 1) {
-      setEditingHostnameIndex(null)
-      setEditingInput("")
+      setEditingHostnameIndex(null);
+      setEditingInput("");
       const updatedHostnames = hostnameList().filter((_, i) => i !== index);
       setHostnameList(updatedHostnames);
       setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
-      
+
       setShowNotification("Hostname Deleted!"); // Show notification
     } else {
       setShowNotification("Cannot delete the last hostname!"); // Ensure at least one hostname
@@ -152,28 +165,26 @@ export const Hostbar = (props: ComingIpData) => {
   const handleHostnameFocusOut = (
     e: FocusEvent & { currentTarget: HTMLLIElement; target: Element }
   ): void => {
-
     // Check if the focus is moving to the delete button or the input field
-  const relatedTarget = e.relatedTarget as HTMLElement;
+    const relatedTarget = e.relatedTarget as HTMLElement;
 
-  // If the related target is the delete button or the input field, do not commit changes
-  if (
-    relatedTarget &&
-    (relatedTarget.classList.contains("delete-hostname-btn") ||
-      relatedTarget.classList.contains("temp-hostname-input"))
-  ) {
-    return; // Exit the function without committing changes
-  }
-      const updatedHostnames = hostnameList().map((host, i) =>
-        i === editingHostnameIndex() ? editingInput() : host
-      );
+    // If the related target is the delete button or the input field, do not commit changes
+    if (
+      relatedTarget &&
+      (relatedTarget.classList.contains("delete-hostname-btn") ||
+        relatedTarget.classList.contains("temp-hostname-input"))
+    ) {
+      return; // Exit the function without committing changes
+    }
+    const updatedHostnames = hostnameList().map((host, i) =>
+      i === editingHostnameIndex() ? editingInput() : host
+    );
 
-      setHostnameList(updatedHostnames);
-      setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
-      setEditingHostnameIndex(null);
-      setEditingInput("");
-      setShowNotification("Hostname Updated!"); // Show notification
-    
+    setHostnameList(updatedHostnames);
+    setInternalStore(props.index, "hostname", updatedHostnames as Host[]);
+    setEditingHostnameIndex(null);
+    setEditingInput("");
+    setShowNotification("Hostname Updated!"); // Show notification
   };
 
   // Delete the entire Hostbar
