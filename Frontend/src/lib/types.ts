@@ -17,6 +17,7 @@ export type IPStore = {
   ip: IPAddress;
   hostname: Host[];
   isNew?: boolean;
+  checked?: boolean
 };
 
 export interface ComingIpData {
@@ -24,4 +25,5 @@ export interface ComingIpData {
   ip: IPAddress;
   hostname: Host[];
   isNew?: boolean;
+  checked?: boolean
 }

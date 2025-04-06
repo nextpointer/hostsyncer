@@ -54,4 +54,14 @@
   top: calc(40px + 0.9rem);
   
 }
+#ip-delete-btn {
+  position: absolute;
+  right: calc(40px + 9.9rem);
+  top: calc(40px + 0.9rem);
+  
+}
+
+
+
+
 

@@ -70,7 +70,6 @@ export const Nav = () => {
       const rect = navElementRefs[index].getBoundingClientRect();
       setTopValue(rect.top);
       setLeftValue(rect.left);
-      console.log("Updated positions:", rect.top, rect.left);
     }
   };
 

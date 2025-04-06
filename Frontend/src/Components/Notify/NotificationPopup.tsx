@@ -19,7 +19,6 @@ export const NotificationPopup = (props: {
   const style = {
     "background-color": props.error ? "red" : "#2c974e",
   };
-  console.log(style);
 
   return (
     <>

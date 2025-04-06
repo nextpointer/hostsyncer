@@ -4,6 +4,7 @@ import { ComingIpData, Host, IPAddress } from "../../lib/types";
 import { internalStore, setInternalStore } from "../../Store/store";
 import { setNotifyError } from "../../Store/store";
 import { setShowNotification } from "../../Store/store";
+import { checkedItem,setCheckedItem } from "../../Store/store";
 
 export const Hostbar = (props: ComingIpData) => {
   // create a state for ip that is init by prop.ip
@@ -33,12 +34,26 @@ export const Hostbar = (props: ComingIpData) => {
   let IpRef: HTMLInputElement | undefined;
   // when the screen first time mount this things will execute
   onMount(() => {
+    
     if (IpRef && isNewEntry()) {
       IpRef.focus();
       IpRef.select();
       setIsNewEntry(false);
     }
+    // set the checkvalues 
+    setCheckedValue(props.index,props.checked);
   });
+  
+  
+  
+  
+  // set Checked value to the Hashmap
+  const setCheckedValue = (id:number,value:boolean |undefined)=>{
+    const tempMap = checkedItem();
+    tempMap.set(id,value);
+    setCheckedItem(new Map(tempMap));
+  }
+
 
   // this is the function for set the Ip from Input
   const handleIpChange = (e: Event) => {
@@ -187,11 +202,11 @@ export const Hostbar = (props: ComingIpData) => {
   };
 
   // Delete the entire Hostbar
-  const handleDeleteHostbar = () => {
-    const updatedStore = internalStore.filter((_, i) => i !== props.index);
-    setInternalStore(updatedStore);
-    setShowNotification("Hostname deleted!");
-  };
+  // const handleDeleteHostbar = () => {
+  //   const updatedStore = internalStore.filter((_, i) => i !== props.index);
+  //   setInternalStore(updatedStore);
+  //   setShowNotification("Hostname deleted!");
+  // };
 
   return (
     <div class="Bar-Container">
@@ -252,9 +267,15 @@ export const Hostbar = (props: ComingIpData) => {
         )}
       </div>
 
-      <button class="delete-hostbar-btn" onClick={handleDeleteHostbar}>
-        Delete Host
-      </button>
+      <label class="delete-checkbox-container">
+        <input
+          type="checkbox"
+          name=""
+          class="delete-input-checkbox"
+          checked={false}
+        />
+        <span class="checkmark"></span>
+      </label>
     </div>
   );
 };

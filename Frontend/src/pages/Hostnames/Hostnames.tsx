@@ -2,7 +2,11 @@ import { Hostbar } from "../../Components/Hostbar/Hostbar";
 import "./hostname.css";
 import { IPAddress, Host, IPStore } from "../../lib/types";
 import { Button } from "../../Components/Button/Button";
-import { internalStore, setInternalStore } from "../../Store/store";
+import {
+  checkedItem,
+  internalStore,
+  setInternalStore,
+} from "../../Store/store";
 import { showNotification, setShowNotification } from "../../Store/store";
 import { NotificationPopup } from "../../Components/Notify/NotificationPopup";
 import { NotifyError } from "../../Store/store";
@@ -16,6 +20,7 @@ export const Hostnames = () => {
       ip: "127.0.0.1" as IPAddress,
       hostname: ["localhost"] as Host[],
       isNew: true,
+      checked: false,
     };
     setInternalStore((prev) => [...prev, obj]);
   };
@@ -39,7 +44,23 @@ export const Hostnames = () => {
         width="7rem"
         id="ip-add-btn"
       />
+      <Button
+        label="Delete"
+        onClick={() => console.log(checkedItem())}
+        height="3rem"
+        width="7rem"
+        id="ip-delete-btn"
+      />
       <div class="hostname-container">
+        {/* <label class="delete-checkbox-container universal">
+          <input
+            type="checkbox"
+            name=""
+            class="delete-input-checkbox"
+            checked={false}
+          />
+          <span class="checkmark"></span>
+        </label> */}
         {/* Map the Hostbar component */}
         {internalStore.map((ipstore: IPStore, index) => {
           return (
@@ -48,10 +69,10 @@ export const Hostnames = () => {
               ip={ipstore.ip}
               hostname={ipstore.hostname}
               isNew={ipstore.isNew}
+              checked={ipstore.checked}
             />
           );
         })}
-        
       </div>
     </>
   );
