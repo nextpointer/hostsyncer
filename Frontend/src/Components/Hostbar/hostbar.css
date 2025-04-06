@@ -91,6 +91,18 @@
   background: transparent;
   /* background-color: rgb(17, 0, 255); */
 }
+.hostname-input::placeholder{
+  opacity: 0;
+  font-size: 1.5rem;
+  font-weight: 100;
+}
+.hostname-input:hover::placeholder{
+  opacity: 1;
+}
+.hostname-input:focus::placeholder{
+  opacity: 0;
+}
+
 .temp-hostname-input {
   border: none;
   outline: none;

@@ -247,6 +247,7 @@ export const Hostbar = (props: ComingIpData) => {
             value={hostnameInput()}
             onInput={handleHostnameChange}
             onKeyDown={handleHostnameInput}
+            placeholder="+"
           />
         )}
       </div>
