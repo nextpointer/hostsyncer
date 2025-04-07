@@ -101,4 +101,8 @@ setInternalStore([
 export const [showNotification, setShowNotification]  = createSignal<string>("")
 export const [NotifyError, setNotifyError] = createSignal<boolean>(false);
 // create a store for check-to-delete feature
-export const [checkedItem,setCheckedItem] = createSignal<Map<number,boolean | undefined>>(new Map())
+export const [checkedItem,setCheckedItem] = createSignal<Map<number,boolean | undefined>>(new Map());
+// create a state for delete button visibility
+export const [deleteButtonVisibile,setDeleteButtonVisible] = createSignal<boolean>(false);
+// state for select all feature
+export const [selectAll,setSelectAll] = createSignal<boolean>(false);

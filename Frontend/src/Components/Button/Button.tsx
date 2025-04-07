@@ -1,7 +1,7 @@
 import './Button.css'
 
 interface Props{
-    label:string
+    label?:string
     height:string
     width:string
     onClick: () => void

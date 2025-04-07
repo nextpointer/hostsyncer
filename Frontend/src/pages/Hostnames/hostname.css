@@ -3,6 +3,7 @@
   /* border: 1px solid #6d6d6d6b; */
   width: 90%;
   margin-bottom: 2rem;
+  margin-top: 1.3rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -58,9 +59,31 @@
   position: absolute;
   right: calc(40px + 9.9rem);
   top: calc(40px + 0.9rem);
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    color: #000;
+    border: none;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    outline: none;
+    padding:0.72rem 0.8rem ;
+    cursor: pointer;
+    &:hover{
+        background-color: #000000;
+        color: #fff;
+        outline: #b7b7b7 2px solid;
+    }
   
 }
 
+.universal{
+  right: calc(40px + 4.5rem);
+  top: calc(40px + 5rem);
+  border: 3px solid #4c4c4c;
+  border-radius: 5px;
+}
 
 
 

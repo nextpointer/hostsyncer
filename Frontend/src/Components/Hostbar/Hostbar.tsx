@@ -1,7 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 import "./hostbar.css";
 import { ComingIpData, Host, IPAddress } from "../../lib/types";
-import { internalStore, setInternalStore } from "../../Store/store";
+import { setDeleteButtonVisible, setInternalStore } from "../../Store/store";
 import { setNotifyError } from "../../Store/store";
 import { setShowNotification } from "../../Store/store";
 import { checkedItem,setCheckedItem } from "../../Store/store";
@@ -42,6 +42,7 @@ export const Hostbar = (props: ComingIpData) => {
     }
     // set the checkvalues 
     setCheckedValue(props.index,props.checked);
+    
   });
   
   
@@ -52,6 +53,21 @@ export const Hostbar = (props: ComingIpData) => {
     const tempMap = checkedItem();
     tempMap.set(id,value);
     setCheckedItem(new Map(tempMap));
+  }
+  // create a function for upate the map when checked or unchecked
+  const handlemap = () =>{
+    setCheckedItem((prev)=>{
+      const newState = new Map(prev);
+      const currentChecked = checkedItem().get(props.index);
+      newState.set(props.index,!currentChecked);
+      return newState;
+    })
+
+    // update the state of delete button visibility
+    const tempArray = Array.from(checkedItem().values());
+    const state = tempArray.some((value)=>value===true)
+    setDeleteButtonVisible(state);
+    
   }
 
 
@@ -201,12 +217,6 @@ export const Hostbar = (props: ComingIpData) => {
     setShowNotification("Hostname Updated!"); // Show notification
   };
 
-  // Delete the entire Hostbar
-  // const handleDeleteHostbar = () => {
-  //   const updatedStore = internalStore.filter((_, i) => i !== props.index);
-  //   setInternalStore(updatedStore);
-  //   setShowNotification("Hostname deleted!");
-  // };
 
   return (
     <div class="Bar-Container">
@@ -272,7 +282,8 @@ export const Hostbar = (props: ComingIpData) => {
           type="checkbox"
           name=""
           class="delete-input-checkbox"
-          checked={false}
+          checked={checkedItem().get(props.index)}
+          onchange={handlemap}
         />
         <span class="checkmark"></span>
       </label>
