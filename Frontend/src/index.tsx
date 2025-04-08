@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { Route, Router } from "@solidjs/router";
 import { Hostnames } from "./pages/Hostnames/Hostnames";
-import { Settings } from "./pages/Settings";
+import { Settings } from "./pages/Settings/Settings";
 import { Analytics } from "./pages/Analytics";
 import { Error } from "./pages/Error";
 
